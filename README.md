@@ -88,7 +88,7 @@ If the output is similar to the one above, the software was successfully uploade
 
 To debug the software, you need to run the following command:
 ```
-build$ ./picoce.py mdb mdb_myBoard.conf logic_board_app.elf
+build$ ./picoce.py mdb "mdb_myBoard.conf firmware_app.elf"
 ```
 As an example of mdb_myBoard.conf file you can find in this repository. It contains the information for Microchip Debugger on which target device is used, which programmer is used, and which communication interface is used.
 
@@ -106,7 +106,7 @@ You can use the following commands to control the debugger:
 - `continue` - continue the execution of the software
 - `quit` - exit the debugger
 
-For any additional information about the debugger, please refer to the [Microchip MDP documentation](https://www.microchip.com/en-us/development-tools-tools-and-software/mplab-x-ide).
+For any additional information about the debugger, please refer to the [Microchip MDB documentation](https://onlinedocs.microchip.com/pr/GUID-EB8052B1-A215-4F5C-BAE4-F2871856E4B4-en-US-2/index.html?GUID-4AF0D947-8290-442B-89A9-C2AFD1235234).
 
 
 
