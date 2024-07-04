@@ -28,7 +28,7 @@ def hwscan(stdout):
 
     for line in stdout_lines:
         line = line.strip()
-        if line in ["Hwtool", "quit"] or not line:
+        if line in ["hwtool", "quit"] or not line:
             continue
 
         if not header_processed:

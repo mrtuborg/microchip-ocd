@@ -69,8 +69,13 @@ def form_exec_command_arguments(args_tool, args, workspace):
             arguments_line = script_tmp
 
     elif args_tool == 'scan':
+        script_tmp = f"mdb_scan.tmp"
+        with open(script_tmp, 'w') as tmp_file:
+                tmp_file.write(f'hwtool\nquit\n')
+        with open(script_tmp, 'r') as tmp_file:
+                logger.debug(tmp_file.read())
         exec_command = "/opt/microchip/mplabx/v6.20/mplab_platform/bin/mdb.sh"
-        arguments_line = "/workspace/mdb_scan.conf"
+        arguments_line = "/workspace/mdb_scan.tmp"
 
     logger.debug('tool:' + args_tool)
     logger.debug('exec_command:' + exec_command)
@@ -119,6 +124,7 @@ def run_docker(image_name, tool, exec_command, arguments, logger=None):
     try:
         if tool == 'scan':
             result = subprocess.run(docker_command, check=True, capture_output=True, text=True)
+            logger.debug(result.stdout)
             hwscan(result.stdout)
         else:
             subprocess.run(docker_command, check=True)
