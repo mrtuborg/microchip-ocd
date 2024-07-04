@@ -28,12 +28,12 @@ def setup_logging(verbose):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Upload files and manage Docker containers for MPLAB tools.')
-    parser.add_argument('tool', choices=['ipe', 'mdb', 'shell', 'scan'], help='The tool to use')
+    parser.add_argument('tool', choices=['ipe', 'mdb', 'shell', 'scan', 'erase'], help='The tool to use')
     parser.add_argument('file', nargs='?', help='The binary file to upload')
     parser.add_argument('--lock_duration', type=int, default=0, help='Lock duration in seconds')
     parser.add_argument('--hwtool_type', type=str, help='Programmer ID, i.e. ICD4')
     parser.add_argument('--hwtool_sn', type=str, help='Programmer serial number, i.e. BUR202672399')
-    parser.add_argument('--target', type=str, default='PIC32MK1024GPK064', help='Target device, i.e. PIC32MK1024GPK064')
+    parser.add_argument('--target', type=str, default='32MK1024GPK064', help='Target device, i.e. PIC32MK1024GPK064')
     parser.add_argument('--image-name', default='registry.gitlab.com/biosort-as/eels/infrastructure/docker/mplabx-container', help='Docker container name')
     parser.add_argument('--image-tag', default='v6.20.2', help='Docker image tag to use')
     parser.add_argument('-v', '--verbose', action='store_true', help='Increase output verbosity')
@@ -48,7 +48,7 @@ def form_exec_command_arguments(args_tool, args, workspace):
         hex_file = args.file
         exec_command = "/opt/microchip/mplabx/v6.20/mplab_platform/mplab_ipe/ipecmd.sh"
         # -TP{args.hwtool_type} - have own naming, that differs from mdb.sh output, so will use only serial number
-        arguments_line = f"-P32MK1024GPK064 -TS{args.hwtool_sn} -F{hex_file} -M -OL"
+        arguments_line = f"-P{args.target} -TS{args.hwtool_sn} -F{hex_file} -M -OL"
 
     elif args_tool == 'mdb':
         exec_command = "/opt/microchip/mplabx/v6.20/mplab_platform/bin/mdb.sh"
@@ -76,6 +76,10 @@ def form_exec_command_arguments(args_tool, args, workspace):
                 logger.debug(tmp_file.read())
         exec_command = "/opt/microchip/mplabx/v6.20/mplab_platform/bin/mdb.sh"
         arguments_line = "/workspace/mdb_scan.tmp"
+
+    elif args_tool == 'erase':
+        exec_command = "/opt/microchip/mplabx/v6.20/mplab_platform/mplab_ipe/ipecmd.sh"
+        arguments_line = f"-P{args.target} -TS{args.hwtool_sn} -E"
 
     logger.debug('tool:' + args_tool)
     logger.debug('exec_command:' + exec_command)
